@@ -1,4 +1,4 @@
-require './lib/world_objects.rb'
+require './lib/world_object'
 require './lib/robot.rb'
 require './lib/screen.rb'
 require './lib/engine.rb'
@@ -9,8 +9,8 @@ require './lib/engine.rb'
   Robot.new(n)
 end
 
-screen = Screen.new(20, 10, WorldObjects.objects)
+screen = Screen.new(20, 10, WorldObject.objects)
 
-engine = Engine.new(WorldObjects.objects, screen)
+engine = Engine.new(WorldObject.objects, screen)
 
 engine.run
