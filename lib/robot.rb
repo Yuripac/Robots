@@ -1,25 +1,23 @@
 require "./lib/drawable.rb"
 require "./lib/runnable.rb"
+require "./lib/world_object.rb"
 require "observer"
 
-class Robot
+class Robot < WorldObject
   @@states = {
     hunting: 1,
     resting: 2
   }
-  @@list = []
 
   attr_accessor :id, :state, :score
 
   include Drawable, Runnable
-  extend Observable
 
   def initialize(id)
+    super()
     @id = id
     @score = 1
     @state = @@states[:hunting]
-
-    Robot.add(self)
   end
 
   # Overrides the Runnable's method
@@ -57,7 +55,10 @@ class Robot
 
   # Checks if must atack the other robots
   def check_must_attack
-    Robot.list.each do |robot_defenser|
+    # Take all robots
+    robots = WorldObject.objects.select {|obj| obj.is_a?(Robot)}
+
+    robots.each do |robot_defenser|
       if self.same_position?(robot_defenser) and self != robot_defenser
         self.attack(robot_defenser)
       end
@@ -76,30 +77,12 @@ class Robot
 
   # Robot is "destroyed"
   def die
-    Robot.delete(self)
+    delete
   end
 
   # Class's attributes
 
   def self.states
     @@states
-  end
-
-  def self.list
-    @@list
-  end
-
-  private
-
-  def self.add(robot)
-    @@list << robot
-    changed
-    notify_observers(Robot.list)
-  end
-
-  def self.delete(robot)
-    @@list.delete(robot)
-    changed
-    notify_observers(Robot.list)
   end
 end
