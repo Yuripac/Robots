@@ -1,7 +1,6 @@
 require "./lib/drawable.rb"
 require "./lib/runnable.rb"
 require "./lib/world_object.rb"
-require "observer"
 
 class Robot < WorldObject
   @@states = {
@@ -56,7 +55,7 @@ class Robot < WorldObject
   # Checks if must atack the other robots
   def check_must_attack
     # Take all robots
-    robots = WorldObject.objects.select {|obj| obj.is_a?(Robot)}
+    robots = WorldObject.objects[:robot]
 
     robots.each do |robot_defenser|
       if self.same_position?(robot_defenser) and self != robot_defenser
@@ -81,7 +80,6 @@ class Robot < WorldObject
   end
 
   # Class's attributes
-
   def self.states
     @@states
   end
